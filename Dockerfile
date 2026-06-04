@@ -1,18 +1,17 @@
-FROM golang:1.24-alpine AS build
+FROM quay.io/hummingbird/go:1.26 AS builder
 
-WORKDIR /app
+WORKDIR /build
+
 COPY . .
-RUN go build -o hugo-contact .
 
-FROM alpine:latest
+RUN go build -o /build/hugo-contact -buildvcs=false .
+
+FROM quay.io/hummingbird/core-runtime:2
 
 ENV PORT=8080
 EXPOSE 8080
 
-RUN adduser -D appuser
-USER appuser
-
 WORKDIR /app
-COPY --from=build /app/hugo-contact .
+COPY --from=builder /build/hugo-contact .
 
 ENTRYPOINT ["./hugo-contact"]
