@@ -119,7 +119,7 @@ func contactHandler(w http.ResponseWriter, r *http.Request) {
 	email := r.FormValue("email")
 	message := r.FormValue("message")
 
-	if name == "" || email == "" || message == "" {
+	if name == "" || message == "" {
 		http.Error(w, "Missing required fields", http.StatusBadRequest)
 		logger.Warn("Missing required fields", slog.String("ip", ip))
 		return
